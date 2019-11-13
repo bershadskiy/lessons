@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">LessonApp-ar-IL</string>
+	<dimen name="img_size">288dp</dimen>
 </resources>
