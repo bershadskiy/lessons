@@ -30,7 +30,7 @@ public class DetailActivity extends AppCompatActivity {
 		if (0 > itemPosition)
 			finish();
 
-		bankCardModel = BankCardManager.getCard(itemPosition);
+		bankCardModel = BankCardManager.getCard(getApplicationContext(), itemPosition);
 
 		cardNumber.setText(bankCardModel.getNum());
 		ownerName.setText(bankCardModel.getOwnerName());

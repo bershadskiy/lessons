@@ -32,7 +32,7 @@ public class AddCardActivity extends AppCompatActivity implements View.OnClickLi
 		String dateStr = expires.getText().toString();
 		String pinStr = pin.getText().toString();
 		BankCardModel bankCardModel = new BankCardModel(ownerNameStr, numStr, dateStr, pinStr, 0f);
-		BankCardManager.addBankCard(bankCardModel);
+		BankCardManager.addBankCard(getApplicationContext(),bankCardModel);
 		finish();
 	}
 }

@@ -15,13 +15,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MainFragment extends Fragment implements View.OnClickListener {
 
-	interface IMainFragment{
+	private MyAdapter adapter;
+
+	interface IMainFragment {
 		void onItemClick(int position);
 	}
 
@@ -43,9 +48,16 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 	Button button;
 	IMainFragment listener;
 
-	MainFragment setListener(IMainFragment listener){
+	MainFragment setListener(IMainFragment listener) {
 		this.listener = listener;
 		return this;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		adapter.bankCardModels = BankCardManager.getAppDatabase(this.getContext()).bankCardModelDao().getAll();
+		adapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -54,7 +66,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
 		recyclerView = view.findViewById(android.R.id.list);
-		MainFragment.MyAdapter adapter = new MainFragment.MyAdapter();
+		adapter = new MyAdapter();
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -72,12 +84,14 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 	@Override
 	public void onClick(View v) {
 		int itemPosition = (int) v.getTag();
-		if(null != listener){
+		if (null != listener) {
 			listener.onItemClick(itemPosition);
 		}
 	}
 
 	private class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+
+		List<BankCardModel> bankCardModels = new ArrayList<>(0);
 
 		public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -106,12 +120,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
 		@Override
 		public void onBindViewHolder(@NonNull MyAdapter.ViewHolder holder, int position) {
-			holder.bind(BankCardManager.getCard(position), position);
+			holder.bind(bankCardModels.get(position), position);
 		}
 
 		@Override
 		public int getItemCount() {
-			return BankCardManager.getCardsCount();
+			return bankCardModels.size();
 		}
 	}
 

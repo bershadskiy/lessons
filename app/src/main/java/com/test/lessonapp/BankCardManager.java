@@ -1,7 +1,9 @@
 package com.test.lessonapp;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+import android.util.Log;
+
+import androidx.room.Room;
 
 /**
  * Part of LessonApp by OasisMediaSystems
@@ -10,34 +12,41 @@ import java.util.List;
  */
 public class BankCardManager {
 
-	private static List<BankCardModel> bankCards = new ArrayList<BankCardModel>(6) {{
-		add(new BankCardModel("owner1", "1234 5678 9012 3456", "08/25", "1234", 1000f));
-		add(new BankCardModel("owner2", "1234 5678 9012 3456", "08/25", "1234", 1000f));
-		add(new BankCardModel("owner3", "1234 5678 9012 3456", "08/25", "1234", 1000f));
-		add(new BankCardModel("owner4", "1234 5678 9012 3456", "08/25", "1234", 1000f));
-		add(new BankCardModel("owner5", "1234 5678 9012 3456", "08/25", "1234", 1000f));
-		add(new BankCardModel("owner6", "1234 5678 9012 3456", "08/25", "1234", 1000f));
-	}};
+	private static final String TAG = "BankCardManager";
 
-	public static void addBankCard(BankCardModel bankCardModel) {
-		bankCards.add(bankCardModel);
-	}
+	private static AppDatabase appDatabase;
 
-	public static boolean setBankCard(BankCardModel card, int position) {
-		boolean result = true;
-		try {
-			bankCards.set(position, card);
-		} catch (Exception e) {
-			result = false;
+	public static AppDatabase getAppDatabase(Context context) {
+		Log.d(TAG, "getAppDatabase");
+		if (null == appDatabase) {
+			appDatabase = Room
+							.databaseBuilder(context.getApplicationContext()
+											, AppDatabase.class, "lesson-db")
+							.allowMainThreadQueries()
+							.fallbackToDestructiveMigration()
+							.build();
 		}
-		return result;
+		return appDatabase;
 	}
 
-	public static BankCardModel getCard(int index) {
-		return bankCards.get(index);
+	public static void addBankCard(Context context, BankCardModel bankCardModel) {
+		Log.d(TAG, "addBankCard");
+		getAppDatabase(context).bankCardModelDao().insertAll(bankCardModel);
 	}
 
-	public static int getCardsCount() {
-		return bankCards.size();
+	public static void setBankCard(Context context, BankCardModel card) {
+		Log.d(TAG, "setBankCard");
+		getAppDatabase(context).bankCardModelDao().update(card);
+	}
+
+	public static BankCardModel getCard(Context context, int id) {
+		Log.d(TAG, "getCard");
+
+		return getAppDatabase(context).bankCardModelDao().getById(id);
+	}
+
+	public static int getCardsCount(Context context) {
+		Log.d(TAG, "getCardsCount");
+		return getAppDatabase(context).bankCardModelDao().getCount();
 	}
 }

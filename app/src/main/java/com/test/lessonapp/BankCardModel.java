@@ -1,12 +1,33 @@
 package com.test.lessonapp;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 /**
  * Part of LessonApp by OasisMediaSystems
  * 2017-2019
  * Created by dimabershadskiy on 2019-10-29.
  */
+@Entity(tableName = "bank_card_model")
 public class BankCardModel {
-	private String ownerName,num,date,pin;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	@PrimaryKey(autoGenerate = true)
+	private int id;
+
+	@ColumnInfo(name = "owner_name")
+	private String ownerName;
+	private String num;
+	private String date;
+	private String pin;
 	private float balance;
 
 	public BankCardModel(String ownerName, String num, String date, String pin, float balance) {

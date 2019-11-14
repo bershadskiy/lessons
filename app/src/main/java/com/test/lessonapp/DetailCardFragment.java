@@ -61,7 +61,7 @@ public class DetailCardFragment extends Fragment {
 		Bundle arguments = getArguments();
 		int itemPosition = arguments.getInt(EXTRA_KEY_POSITION, -1);
 		if (0 <= itemPosition) {
-			BankCardModel bankCardModel = BankCardManager.getCard(itemPosition);
+			BankCardModel bankCardModel = BankCardManager.getCard(getContext(),itemPosition);
 
 			cardNumber.setText(bankCardModel.getNum());
 			ownerName.setText(bankCardModel.getOwnerName());
