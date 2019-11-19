@@ -56,7 +56,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 	@Override
 	public void onResume() {
 		super.onResume();
-		adapter.bankCardModels = BankCardManager.getAppDatabase(this.getContext()).bankCardModelDao().getAll();
+		adapter.bankCardModels = BankCardManager.getAppDatabase().bankCardModelDao().getAll();
 		adapter.notifyDataSetChanged();
 	}
 

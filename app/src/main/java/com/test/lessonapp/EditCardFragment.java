@@ -65,7 +65,7 @@ public class EditCardFragment extends Fragment implements View.OnClickListener {
 	@Override
 	public void onStart() {
 		super.onStart();
-		BankCardModel card = BankCardManager.getCard(getContext(), mParam1);
+		BankCardModel card = BankCardManager.getCard(mParam1);
 		cardNumber.setText(card.getNum());
 		ownerName.setText(card.getOwnerName());
 		expires.setText(card.getDate());
@@ -74,12 +74,12 @@ public class EditCardFragment extends Fragment implements View.OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		BankCardModel card = BankCardManager.getCard(getContext(), mParam1);
+		BankCardModel card = BankCardManager.getCard(mParam1);
 		card.setNum(cardNumber.getText().toString());
 		card.setOwnerName(ownerName.getText().toString());
 		card.setDate(expires.getText().toString());
 		card.setPin(pin.getText().toString());
-		BankCardManager.setBankCard(getContext(), card);
+		BankCardManager.setBankCard(card);
 	}
 
 }

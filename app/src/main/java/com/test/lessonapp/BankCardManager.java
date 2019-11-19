@@ -1,9 +1,6 @@
 package com.test.lessonapp;
 
-import android.content.Context;
 import android.util.Log;
-
-import androidx.room.Room;
 
 /**
  * Part of LessonApp by OasisMediaSystems
@@ -14,39 +11,29 @@ public class BankCardManager {
 
 	private static final String TAG = "BankCardManager";
 
-	private static AppDatabase appDatabase;
-
-	public static AppDatabase getAppDatabase(Context context) {
+	public static AppDatabase getAppDatabase() {
 		Log.d(TAG, "getAppDatabase");
-		if (null == appDatabase) {
-			appDatabase = Room
-							.databaseBuilder(context.getApplicationContext()
-											, AppDatabase.class, "lesson-db")
-							.allowMainThreadQueries()
-							.fallbackToDestructiveMigration()
-							.build();
-		}
-		return appDatabase;
+		return LessonApplication.getInstance().getDbInstance();
 	}
 
-	public static void addBankCard(Context context, BankCardModel bankCardModel) {
+	public static void addBankCard(BankCardModel bankCardModel) {
 		Log.d(TAG, "addBankCard");
-		getAppDatabase(context).bankCardModelDao().insertAll(bankCardModel);
+		getAppDatabase().bankCardModelDao().insertAll(bankCardModel);
 	}
 
-	public static void setBankCard(Context context, BankCardModel card) {
+	public static void setBankCard(BankCardModel card) {
 		Log.d(TAG, "setBankCard");
-		getAppDatabase(context).bankCardModelDao().update(card);
+		getAppDatabase().bankCardModelDao().update(card);
 	}
 
-	public static BankCardModel getCard(Context context, int id) {
+	public static BankCardModel getCard(int id) {
 		Log.d(TAG, "getCard");
 
-		return getAppDatabase(context).bankCardModelDao().getById(id);
+		return getAppDatabase().bankCardModelDao().getById(id);
 	}
 
-	public static int getCardsCount(Context context) {
+	public static int getCardsCount() {
 		Log.d(TAG, "getCardsCount");
-		return getAppDatabase(context).bankCardModelDao().getCount();
+		return getAppDatabase().bankCardModelDao().getCount();
 	}
 }
