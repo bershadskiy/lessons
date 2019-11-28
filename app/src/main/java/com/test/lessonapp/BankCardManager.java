@@ -16,9 +16,15 @@ public class BankCardManager {
 		return LessonApplication.getInstance().getDbInstance();
 	}
 
-	public static void addBankCard(BankCardModel bankCardModel) {
+	public static void addBankCard(final BankCardModel bankCardModel) {
 		Log.d(TAG, "addBankCard");
-		getAppDatabase().bankCardModelDao().insertAll(bankCardModel);
+		LessonApplication.databaseWriteExecutor.execute(new Runnable() {
+			@Override
+			public void run() {
+				getAppDatabase().bankCardModelDao().insertAll(bankCardModel);
+			}
+		});
+
 	}
 
 	public static void setBankCard(BankCardModel card) {
@@ -32,8 +38,4 @@ public class BankCardManager {
 		return getAppDatabase().bankCardModelDao().getById(id);
 	}
 
-	public static int getCardsCount() {
-		Log.d(TAG, "getCardsCount");
-		return getAppDatabase().bankCardModelDao().getCount();
-	}
 }
