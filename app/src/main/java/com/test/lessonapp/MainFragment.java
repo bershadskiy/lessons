@@ -1,7 +1,11 @@
 package com.test.lessonapp;
 
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,13 +16,18 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,10 +35,20 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends Fragment implements View.OnClickListener {
+public class MainFragment extends Fragment implements View.OnClickListener, View.OnTouchListener {
 	private static final String TAG = "MainFragment";
 
 	private MyAdapter adapter;
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		Log.d(TAG, "onTouch: " + event.toString());
+		int itemPosition = (int) v.getTag();
+		if (null != listener) {
+			listener.onItemClick(itemPosition);
+		}
+		return true;
+	}
 
 	interface IMainFragment {
 		void onItemClick(int position);
@@ -82,6 +101,15 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 				startActivity(intent);
 			}
 		});
+
+		view.findViewById(R.id.bindBtn).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = TestService.getCommandInten(getContext(), Uri.parse("http://asd.com"));
+				getActivity().startService(intent);
+			}
+		});
+
 		return view;
 	}
 
@@ -124,8 +152,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 			void bind(BankCardModel data, int position) {
 				text2.setText(data.getNum());
 				text1.setText(data.getOwnerName());
-				itemView.setTag(position);
-				itemView.setOnClickListener(MainFragment.this);
+				itemView.setTag(data.getId());
+				itemView.setOnTouchListener(MainFragment.this);
 			}
 		}
 

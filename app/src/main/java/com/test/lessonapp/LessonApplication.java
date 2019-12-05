@@ -1,6 +1,8 @@
 package com.test.lessonapp;
 
 import android.app.Application;
+import android.content.Intent;
+import android.content.IntentFilter;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,6 +31,8 @@ public class LessonApplication extends Application {
 	static final ExecutorService databaseWriteExecutor =
 					Executors.newFixedThreadPool(1);
 
+	MyReceiver receiver;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -37,6 +41,10 @@ public class LessonApplication extends Application {
 						.databaseBuilder(this
 										, AppDatabase.class, "lesson-db")
 						.fallbackToDestructiveMigration()
+
 						.build();
+
+		receiver = new MyReceiver();
+		registerReceiver(receiver, new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED));
 	}
 }
