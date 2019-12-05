@@ -1,10 +1,7 @@
 package com.test.lessonapp;
 
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -16,7 +13,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -25,9 +21,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,7 +98,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, View
 		view.findViewById(R.id.bindBtn).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = TestService.getCommandInten(getContext(), Uri.parse("http://asd.com"));
+				Intent intent = TestService.getCommandIntent(getContext(), "bershadskiy");
 				getActivity().startService(intent);
 			}
 		});

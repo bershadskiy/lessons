@@ -6,8 +6,14 @@ import android.content.IntentFilter;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
 
 import androidx.room.Room;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.Retrofit.Builder;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Part of LessonApp by OasisMediaSystems
@@ -24,14 +30,14 @@ public class LessonApplication extends Application {
 
 	private AppDatabase dbInstance;
 
-	public AppDatabase getDbInstance(){
+	public AppDatabase getDbInstance() {
 		return dbInstance;
 	}
 
 	static final ExecutorService databaseWriteExecutor =
 					Executors.newFixedThreadPool(1);
 
-	MyReceiver receiver;
+	Retrofit retrofit;
 
 	@Override
 	public void onCreate() {
@@ -44,7 +50,15 @@ public class LessonApplication extends Application {
 
 						.build();
 
-		receiver = new MyReceiver();
-		registerReceiver(receiver, new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED));
+		HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+		loggingInterceptor.level(HttpLoggingInterceptor.Level.BASIC);
+
+		OkHttpClient okHttpClient = new OkHttpClient.Builder().addInterceptor(loggingInterceptor).build();
+
+		retrofit = new Retrofit.Builder()
+						.baseUrl("https://api.github.com")
+						.addConverterFactory(GsonConverterFactory.create())
+						.client(okHttpClient)
+						.build();
 	}
 }

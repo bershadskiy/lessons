@@ -2,6 +2,7 @@ package com.test.lessonapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.IMai
 		setContentView(R.layout.activity_main);
 		rootView = findViewById(R.id.root);
 		detailRoot = findViewById(R.id.detail);
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		ArrayList<Repo> extra_data = intent.getParcelableArrayListExtra("EXTRA_DATA");
+		Log.d(TAG, "onNewIntent: "+extra_data.toString());
 	}
 
 	@Override
